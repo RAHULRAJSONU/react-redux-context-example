@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 // import { connect } from 'react-redux';
 
 import ShopContext from '../context/ShopContext';
@@ -6,8 +6,7 @@ import MainNavigation from '../components/MainNavigation';
 // import { addProductToCart } from '../store/actions';
 import './Products.css';
 
-class ProductsPage extends Component {
-  render() {
+const ProductsPage =props => {
     return (
       <ShopContext.Consumer>
         {context => (
@@ -39,7 +38,6 @@ class ProductsPage extends Component {
         )}
       </ShopContext.Consumer>
     );
-  }
 }
 
 // const mapStateToProps = state => {
