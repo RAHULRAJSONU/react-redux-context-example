@@ -1,30 +1,19 @@
 import React, { Component } from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 
-import ShopContext from '../context/ShopContext';
 import MainNavigation from '../components/MainNavigation';
-// import { removeProductFromCart } from '../store/actions';
+import { removeProductFromCart } from '../store/actions';
 import './Cart.css';
 
 class CartPage extends Component {
-  static contextType = ShopContext;
-
-  componentDidMount() {
-    console.log(this.context);
-  }
-
   render() {
     return (
       <React.Fragment>
-        <MainNavigation
-          cartItemNumber={this.context.cart.reduce((count, curItem) => {
-            return count + curItem.quantity;
-          }, 0)}
-        />
+        <MainNavigation cartItemNumber={this.props.cartItemCount} />
         <main className="cart">
-          {this.context.cart.length <= 0 && <p>No Item in the Cart!</p>}
+          {this.props.cartItems.length <= 0 && <p>No Item in the Cart!</p>}
           <ul>
-            {this.context.cart.map(cartItem => (
+            {this.props.cartItems.map(cartItem => (
               <li key={cartItem.id}>
                 <div>
                   <strong>{cartItem.title}</strong> - ${cartItem.price} (
@@ -32,7 +21,7 @@ class CartPage extends Component {
                 </div>
                 <div>
                   <button
-                    onClick={this.context.removeProductFromCart.bind(
+                    onClick={this.props.removeProductFromCart.bind(
                       this,
                       cartItem.id
                     )}
@@ -49,19 +38,22 @@ class CartPage extends Component {
   }
 }
 
-// const mapStateToProps = state => {
-//   return {
-//     cartItems: state.cart,
-//     cartItemCount: state.cart.reduce((count, curItem) => {
-//       return count + curItem.quantity;
-//     }, 0)
-//   };
-// };
+const mapStateToProps = state => {
+  return {
+    cartItems: state.cart,
+    cartItemCount: state.cart.reduce((count, curItem) => {
+      return count + curItem.quantity;
+    }, 0)
+  };
+};
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     removeProductFromCart: id => dispatch(removeProductFromCart(id))
-//   };
-// };
+const mapDispatchToProps = dispatch => {
+  return {
+    removeProductFromCart: id => dispatch(removeProductFromCart(id))
+  };
+};
 
-export default CartPage;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CartPage);
